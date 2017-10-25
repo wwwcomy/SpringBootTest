@@ -11,3 +11,7 @@
 /simpletest/.settings
 /simpletest/target
 /simpletest/.classpath
+/orderservice/.project
+/orderservice/.settings
+/orderservice/target
+/orderservice/.classpath

@@ -1,0 +1,30 @@
+<html>
+<head>
+</head>
+<body>
+This is a customized login page.
+	<div class="container">
+		<form role="form" id="loginForm" action="login" method="post">
+		  <div class="form-group">
+		    <label for="username">Username:</label>
+		    <input type="text" class="form-control" id="username" name="username"/>
+		  </div>
+		  <div class="form-group">
+		    <label for="password">Password:</label>
+		    <input type="password" class="form-control" id="password" name="password"/>
+		  </div>
+		  <input type="hidden" id="csrf_token" />
+		  <button type="submit" id="loginBtn" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	$("#loginBtn").click(function() {
+		$("#csrf_token").attr('name','_csrf');
+		$("#csrf_token").val($.cookie()['XSRF-TOKEN']);
+		$("#loginForm").submit();
+	})
+</script>
+</html>

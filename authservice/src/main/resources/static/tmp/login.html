@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Demo</title>
+<meta name="description" content="" />
+<base href="/" />
+</head>
+<body>
+	<h1>Login Page</h1>
+	<form>
+		<div>
+			<label for="username">Username:</label> <input type="text"
+				id="username" name="username" />
+		</div>
+		<div>
+			<label for="password">Password:</label> <input type="password"
+				id="password" name="password" />
+		</div>
+		<button type="submit" id="loginBtn">Submit</button>
+	</form>
+</body>
+<script type="text/javascript" src="/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	$("#loginBtn").click(function() {
+		fetch("/login", {
+			method : 'POST',
+			redirect : 'follow',
+			credentials : 'same-origin',
+			headers : {
+				'X-XSRF-TOKEN' : $.cookie()['XSRF-TOKEN']
+			}
+		}).then(function(response) {
+			response.json().then(function(data) {
+				alert("login successfully");
+			});
+		}, function(e) {
+			alert("failed to login");
+		})
+	})
+</script>
+</html>
