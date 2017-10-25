@@ -41,6 +41,7 @@
 	</dependencyManagement>
 	<modules>
 		<module>authservice</module>
+		<module>simpletest</module>
 	</modules>
 	<build>
 		<plugins>
