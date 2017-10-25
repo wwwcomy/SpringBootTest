@@ -1,2 +1,13 @@
 /.project
 /.classpath
+/target/
+/target
+/.settings
+/authservice/target
+/authservice/.settings
+/authservice/.project
+/authservice/.classpath
+/simpletest/.project
+/simpletest/.settings
+/simpletest/target
+/simpletest/.classpath
