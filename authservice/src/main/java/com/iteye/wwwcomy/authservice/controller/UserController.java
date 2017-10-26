@@ -1,4 +1,4 @@
-package com.example.authservice.controller;
+package com.iteye.wwwcomy.authservice.controller;
 
 import java.security.Principal;
 

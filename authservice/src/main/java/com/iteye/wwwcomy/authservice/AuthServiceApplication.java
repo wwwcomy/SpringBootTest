@@ -1,4 +1,4 @@
-package com.example.authservice;
+package com.iteye.wwwcomy.authservice;
 
 import java.security.KeyPair;
 
