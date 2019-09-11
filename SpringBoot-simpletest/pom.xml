@@ -6,7 +6,7 @@
 		<artifactId>SpringBootTest</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>simpletest</artifactId>
+	<artifactId>SpringBoot-simpletest</artifactId>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
