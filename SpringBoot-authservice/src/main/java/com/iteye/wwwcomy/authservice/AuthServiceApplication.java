@@ -72,7 +72,7 @@ class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory().withClient("m1").secret("s1")
 				.authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("openid")
-				.autoApprove(true);
+				.redirectUris("http://localhost:8080/login").autoApprove(true);
 	}
 
 //	@Override
@@ -85,14 +85,4 @@ class OAuth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
 	}
 
-}
-
-@Configuration
-class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
-	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("m1").secret("s1").scopes("openid")
-				.authorizedGrantTypes("authorization_code,refresh_token,password")
-				.redirectUris("http://localhost:8080/login");
-	}
 }
