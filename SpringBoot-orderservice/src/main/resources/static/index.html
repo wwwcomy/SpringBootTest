@@ -31,17 +31,35 @@
 				'ACCEPT' : 'application/json, text/plain'
 			}
 		}).then(function(response) {
+	        if (!response.ok) {
+		    	console.log(response);
+	            throw new Error(response.status);
+	        }
+	        return response;
+	    }).then(function(response) {
+	    	response.json().then(function(data) {
+				$("#userInfo").html(data.name + "");
+			});
+			console.log(response);
+			$("#notLogin").hide();
+			$("#loggedIn").show();
+	    }).catch(function(e) {
+	    	console.log(e);
+			$("#loggedIn").hide();
+			$("#notLogin").show();
+	    });
+		/* (function(response) {
 			response.json().then(function(data) {
 				$("#userInfo").html(data.name + "");
 			});
 			console.log(response);
 			$("#notLogin").hide();
 			$("#loggedIn").show();
-		}, function(e) {
+		}).catch(function(e) {
 			console.log(e);
 			$("#loggedIn").hide();
 			$("#notLogin").show();
-		})
+		}) */
 		$("#logoutBtn").click(function() {
 			fetch("/logout", {
 				method : 'POST',

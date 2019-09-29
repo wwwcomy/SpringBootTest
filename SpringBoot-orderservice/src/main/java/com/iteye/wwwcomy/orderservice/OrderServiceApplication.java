@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.stereotype.Component;
@@ -15,18 +16,20 @@ import com.iteye.wwwcomy.orderservice.entity.Order;
 import com.iteye.wwwcomy.orderservice.repository.OrderRepository;
 
 @SpringBootApplication
-@EnableOAuth2Sso
 public class OrderServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OrderServiceApplication.class, args);
 	}
 
-	public static class SecurityConfig extends WebSecurityConfigurerAdapter {
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http.antMatcher("/**").authorizeRequests().antMatchers("/", "/js/**", "/login").permitAll().anyRequest()
-					.authenticated().and().logout().logoutSuccessUrl("/").permitAll().and().csrf().disable();
-		}
+}
+
+@Configuration
+@EnableOAuth2Sso
+class SecurityConfig extends WebSecurityConfigurerAdapter {
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.antMatcher("/**").authorizeRequests().antMatchers("/index.html").permitAll().anyRequest().authenticated()
+				.and().logout().logoutSuccessUrl("/").permitAll().and().csrf().disable();
 	}
 }
 
