@@ -20,6 +20,17 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/**
+ *
+ * This is the authorization and resource server, as Spring boot 1.5.* + Spring
+ * security oauth2 is no longer the trend, instead, Spring Security 5 will be as
+ * the replacement.
+ * 
+ * @see https://spring.io/blog/2018/01/30/next-generation-oauth-2-0-support-with-spring-security
+ *      I'll look into Spring Boot 2.X + Spring Security 5. This project will be
+ *      deprecated.
+ * @author xingnliu
+ */
 @SpringBootApplication
 @EnableResourceServer
 @EnableAuthorizationServer
@@ -38,23 +49,40 @@ public class AuthServiceApplication extends WebMvcConfigurerAdapter {
 
 }
 
+/**
+ *
+ * Really don't understand why I should use ACCESS_OVERRIDE_ORDER to make it
+ * work
+ * 
+ * @see https://stackoverflow.com/questions/49970346/correctly-configure-spring-security-oauth2
+ * @see https://github.com/spring-projects/spring-security-oauth/issues/980
+ * 
+ *      From what I understand, using spring security OAuth2, multiple
+ *      configurations are done to protect different endpoints, like authorize
+ *      endpoint, user endpoint, token endpoint, login endpoint.
+ * 
+ *      Such kind of endpoints are actually defined in different configurations
+ *      with different filters enabled, which, might have conflicts.
+ * 
+ *      That's why it is so hard to make it work...
+ * @author xingnliu
+ */
 @Configuration
 //@Order(-20)
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER) 
+@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.formLogin().loginPage("/login").permitAll().and().authorizeRequests().antMatchers("/login*").permitAll()
+				.anyRequest().authenticated().and().csrf().disable();
+	}
+	// .antMatchers("/oauth/token").permitAll()
 //	@Override
 //	protected void configure(HttpSecurity http) throws Exception {
-//		http.formLogin().loginPage("/login").permitAll().and().authorizeRequests().antMatchers("/login*").permitAll()
-//				.anyRequest().authenticated().and().csrf().disable();
+//		http.authorizeRequests().antMatchers("/**").authenticated().and().formLogin().loginPage("/login").permitAll()
+//				.and().logout().permitAll();
 //	}
-	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests().antMatchers("/**").authenticated()
-                .and().formLogin().loginPage("/login").permitAll()
-                .and().logout().permitAll();
-    }
 
 }
 
@@ -64,21 +92,17 @@ class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) {
 		resources.resourceId("USERS");
-		//.stateless(true);
 	}
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http
-				// Since we want the protected resources to be accessible in the UI as well we
-				// need
-				// session creation to be allowed (it's disabled by default in 2.0.6)
+		// Since we want the protected resources to be accessible in the UI as well we
+		// need
 //				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
-				.requestMatchers()
-                .antMatchers("/**")
-				.and().authorizeRequests()
+				.requestMatchers().antMatchers("/api/**").and().authorizeRequests()
 //                .antMatchers("/product/**").access("#oauth2.hasScope('select') and hasRole('ROLE_USER')")
-				.antMatchers("/user").authenticated();// 配置 order 访问控制，必须认证过后才可以访问
+				.antMatchers("/user").authenticated();
 	}
 }
 
